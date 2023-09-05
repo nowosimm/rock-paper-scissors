@@ -4,84 +4,100 @@ let gameNumber = 0
 
 const rockButton = document.createElement('button');
 rockButton.textContent = "Rock"
-rockButton.onclick = playRound;
+rockButton.onclick = function() {
+    playRound('rock');
+}
 document.body.appendChild(rockButton);
 
 const paperButton = document.createElement('button');
 paperButton.textContent = "Paper"
-paperButton.onclick = playRound;
-
+paperButton.onclick = function() {
+    playRound('paper');
+}
 document.body.appendChild(paperButton);
 
 const scissorsButton = document.createElement('button');
 scissorsButton.textContent = "Scissors"
-scissorsButton.onclick = playRound;
-
+scissorsButton.onclick = function() {
+    playRound('scissors');
+}
 document.body.appendChild(scissorsButton);
 
 
-// let shouldPlay = prompt("Do you want to play rock, paper, scissors?")
-// if (shouldPlay.toLowerCase() == "asdfsd") {
-//     while (true) {
-
-//         playRound();
-
-//         let playAgain = prompt("Do you want to play again?")
-//         if (playAgain.toLowerCase() == "no") {
-//             break;
-//         }
-
-//         userScore = 0
-//         computerScore = 0
-//         gameNumber = 0
-
-//     }
-
-// } else {
-//     alert("you dont wont to play")
-// }
-
-function playRound() {
+function playRound(userChoice) {
+    if (gameNumber >= 5) {
+        alert('press the reset button to play more')
+        return;
+    }
     gameNumber = gameNumber + 1
-
-    let userChoice = prompt('Pick rock, paper, or scissors!')
-    userChoice = userChoice.toLowerCase()
 
     let computerChoice = getComputerChoice()
 
     if (computerChoice == userChoice) {
-        alert("Its a tie!")
+        displayResults("Its a tie!")
     }
 
     if (userChoice == "rock" && computerChoice == "paper") {
-        alert("computer chose paper, you lose :(")
+        displayResults("computer chose paper, you lose :(")
+        computerScore = computerScore + 1
     }
 
     if (userChoice == "rock" && computerChoice == "scissors") {
-        alert("computer chose scissors, you win!")
+        displayResults("computer chose scissors, you win!")
         userScore = userScore + 1
     }
 
     if (userChoice == "paper" && computerChoice == "scissors") {
-        alert("computer chose scissors, you lose :(")
+        displayResults("computer chose scissors, you lose :(")
+        computerScore = computerScore + 1
     }
 
     if (userChoice == "paper" && computerChoice == "rock") {
-        alert("computer chose rock, you win!")
+        displayResults("computer chose rock, you win!")
         userScore = userScore + 1
     }
 
     if (userChoice == "scissors" && computerChoice == "rock") {
-        alert("computer chose rock, you lose :(")
+        displayResults("computer chose rock, you lose :(")
+        computerScore = computerScore + 1
     }
 
     if (userChoice == "scissors" && computerChoice == "paper") {
-        alert("computer chose paper, you win!")
+        displayResults("computer chose paper, you win!");
+        userScore = userScore + 1
     }
 
-    alert("Your score is " + userScore + "!")
+    updateScore("Your score is " + userScore + "!");
+
+    if (gameNumber >= 5) {
+        if (userScore > computerScore) {
+            alert("You Win!")
+        } else {
+            alert("You lose :(")
+        }
+        const resetButton = document.createElement('button');
+        resetButton.textContent = "Play Again!"
+        resetButton.onclick = function() {
+            userScore = 0;
+            computerScore = 0;
+            gameNumber = 0;
+            updateScore("");
+            displayResults("");
+            resetButton.remove();
+        }
+        document.body.appendChild(resetButton);
+        
+    }
 }
 
+function updateScore(message) {
+    const scoreDiv = document.querySelector("#score");
+    scoreDiv.textContent = message;
+}
+function displayResults(message) {
+    const resultsDiv = document.querySelector("#results");
+    resultsDiv.textContent = message;
+}
 
 function getComputerChoice() {
     // randomNumber can be (0, 1, 2)
